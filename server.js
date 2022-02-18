@@ -18,6 +18,15 @@ if (process.env.NODE_ENV === "production") {
 app.use(passport.initialize());
 app.use(passport.session());
 
+db.sequelize.sync().then(() => {
+  app.listen(PORT, () => {
+    console.log(
+      "==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.",
+      PORT,
+      PORT
+    );
+  });
+});
 // Define API routes here
 require("./routes/*");
 // Send every other request to the React app
@@ -28,14 +37,4 @@ app.get("*", (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`🌎 ==> API server now on port ${PORT}!`);
-});
-
-db.sequelize.sync().then(() => {
-  app.listen(PORT, () => {
-    console.log(
-      "==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.",
-      PORT,
-      PORT
-    );
-  });
 });
