@@ -1,0 +1,31 @@
+version: "3.8"
+
+networks:
+  feast-finder:
+
+volumes:
+  postgres_data:
+    driver: local
+  ff_db:
+    driver: local
+
+services:
+  app:
+    networks:
+      - feast-finder
+    build: .
+    ports:
+      - "5000:5000"
+    expose:
+      - "5000"
+  postgres:
+    networks:
+      - feast-finder
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - ff_db:/var/lib/postgresql/data
